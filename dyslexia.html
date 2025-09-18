@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dyslexia Learning Hub</title>
+  <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #fdfaf6;
+      --text: #2d2d2d;
+      --accent: #4a90e2;
+      --card-bg: #ffffff;
+      --tip-bg: #e8f3ff;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --error: #f44336;
+    }
+   
+    * {
+      box-sizing: border-box;
+    }
+   
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+   
+    body.dark-mode {
+      --bg: #2d2d2d;
+      --text: #f0f0f0;
+      --card-bg: #3a3a3a;
+      --tip-bg: #4a4a4a;
+    }
+   
+    header {
+      background: var(--card-bg);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+   
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+    }
+   
+    .logo img {
+      height: 40px;
+      border-radius: 6px;
+    }
+   
+    header nav a {
+      margin: 0 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: bold;
+    }
+   
+    .auth-buttons button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+   
+    .login-btn {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+    }
+   
+    .signup-btn {
+      background: var(--accent);
+      color: white;
+    }
+   
+    .controls button {
+      margin-left: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: var(--tip-bg);
+      color: var(--text);
+    }
+   
+    /* Main content */
+    .content {
+      max-width: 1200px;
+      margin: 20px auto;
+      gap: 20px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+   
+    .tips {
+      flex: 1;
+      min-width: 300px;
+      background: var(--tip-bg);
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+   
+    .features {
+      flex: 2;
+      min-width: 300px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+   
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: left;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+   
+    .card:hover {
+      background: #eaf2fb;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+   
+    .card h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+   
+    .feature-page {
+      display: none;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+   
+    .feature-page.active {
+      display: block;
+    }
+   
+    .back-btn {
+      margin-bottom: 15px;
+      padding: 10px 16px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+   
+    textarea, input {
+      width: 100%;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1.1rem;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+   
+    /* Dyslexia font output */
+    .dyslexia-output {
+      font-family: 'OpenDyslexic', sans-serif;
+      background: #f0f8ff;
+      padding: 15px;
+      border-radius: 8px;
+      min-height: 100px;
+      margin-top: 15px;
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+   
+    /* Game images */
+    .game-container {
+      text-align: center;
+    }
+   
+    .game-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+   
+    .game-images img {
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+   
+    .game-images img:hover {
+      transform: scale(1.05);
+    }
+   
+    footer {
+      background: #e6f0fb;
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+   
+    body.dark-mode footer {
+      background: #3a3a3a;
+    }
+   
+    /* Feature specific styles */
+    .text-controls {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+   
+    .text-controls button {
+      padding: 10px 15px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+   
+    .story-container {
+      background: #fff9e6;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+   
+    body.dark-mode .story-container {
+      background: #4a4a4a;
+    }
+   
+    .score-board {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+   
+    .score-item {
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 8px;
+      min-width: 100px;
+      text-align: center;
+    }
+   
+    .hint-section {
+      margin: 15px 0;
+      padding: 15px;
+      background-color: #fffacd;
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+   
+    body.dark-mode .hint-section {
+      background-color: #5a5a3a;
+    }
+   
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+      }
+     
+      .content {
+        flex-direction: column;
+      }
+     
+      .game-images {
+        grid-template-columns: 1fr;
+      }
+     
+      .text-controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://img.freepik.com/premium-vector/employee-freelancer-office-room-interior-with-furniture-student-learning_126283-3289.jpg?w=996" alt="Logo">
+      Dyslexia Learning Hub
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Progress</a>
+      <a href="#">About</a>
+      <a href="#">Support</a>
+    </nav>
+    <div class="controls">
+      <button onclick="decreaseFont()" title="Decrease font size">A-</button>
+      <button onclick="increaseFont()" title="Increase font size">A+</button>
+      <button onclick="toggleDarkMode()" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </div>
+    <div class="auth-buttons">
+      <button class="login-btn" onclick="openModal('loginModal')">Log in</button>
+      <button class="signup-btn" onclick="openModal('signupModal')">Sign up</button>
+    </div>
+  </header>
+
+  <!-- Dashboard -->
+  <main id="dashboard" class="content">
+    <div class="tips">
+      <h2>Quick Tips</h2>
+      <ul>
+        <li>Use large fonts always.</li>
+        <li>Listen while following words.</li>
+        <li>Break words into syllables.</li>
+        <li>Use text-to-speech for reading.</li>
+        <li>Take breaks when needed.</li>
+      </ul>
+    </div>
+    <div class="features">
+      <div class="card" onclick="openFeature('read')">
+        <h3><i class="fas fa-volume-up"></i> Read Aloud</h3>
+        <p>Paste text and listen clearly.</p>
+      </div>
+      <div class="card" onclick="openFeature('spell')">
+        <h3><i class="fas fa-magic"></i> Spelling Helper</h3>
+        <p>Type word and hear slowly.</p>
+      </div>
+      <div class="card" onclick="openFeature('listen')">
+        <h3><i class="fas fa-headphones"></i> Listening Practice</h3>
+        <p>Short sentences for practice.</p>
+      </div>
+      <div class="card" onclick="openFeature('story')">
+        <h3><i class="fas fa-book"></i> Random Story</h3>
+        <p>Fun five-line story reading.</p>
+      </div>
+      <div class="card" onclick="openFeature('game')">
+        <h3><i class="fas fa-gamepad"></i> Word Game</h3>
+        <p>Learn new words with images.</p>
+      </div>
+      <div class="card" onclick="openFeature('dyslexia')">
+        <h3><i class="fas fa-font"></i> Dyslexia Font</h3>
+        <p>Convert normal text easily.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Read Aloud Feature -->
+  <div class="feature-page" id="feature-read">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-volume-up"></i> Read Aloud</h2>
+    <p>Paste or type text below and listen to it being read aloud.</p>
+    <textarea id="readText" rows="6" placeholder="Type or paste text here..."></textarea>
+    <div class="text-controls">
+      <button onclick="readAloud()"><i class="fas fa-play"></i> Read Aloud</button>
+      <button onclick="pauseReading()"><i class="fas fa-pause"></i> Pause</button>
+      <button onclick="resumeReading()"><i class="fas fa-play"></i> Resume</button>
+      <button onclick="stopReading()"><i class="fas fa-stop"></i> Stop</button>
+    </div>
+    <div>
+      <label for="readSpeed">Reading Speed:</label>
+      <input type="range" id="readSpeed" min="0.5" max="2" step="0.1" value="1" onchange="updateSpeed()">
+      <span id="speedValue">1.0</span>
+    </div>
+  </div>
+
+  <!-- Spelling Helper Feature -->
+  <div class="feature-page" id="feature-spell">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-magic"></i> Spelling Helper</h2>
+    <p>Type a word to hear it spelled slowly.</p>
+    <input type="text" id="spellWord" placeholder="Type a word to spell">
+    <button onclick="spellWord()"><i class="fas fa-wave-square"></i> Spell Word</button>
+    <div id="spellingOutput" class="dyslexia-output"></div>
+  </div>
+
+  <!-- Listening Practice Feature -->
+  <div class="feature-page" id="feature-listen">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-headphones"></i> Listening Practice</h2>
+    <p>Practice listening to these short sentences:</p>
+    <div class="text-controls">
+      <button onclick="playSentence(0)">Sentence 1</button>
+      <button onclick="playSentence(1)">Sentence 2</button>
+      <button onclick="playSentence(2)">Sentence 3</button>
+      <button onclick="playSentence(3)">Sentence 4</button>
+      <button onclick="playSentence(4)">Sentence 5</button>
+    </div>
+    <div id="sentenceDisplay" class="dyslexia-output"></div>
+  </div>
+
+  <!-- Random Story Feature -->
+  <div class="feature-page" id="feature-story">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-book"></i> Random Story</h2>
+    <p>Click the button to generate a random short story:</p>
+    <button onclick="generateStory()"><i class="fas fa-random"></i> Generate Story</button>
+    <div id="storyOutput" class="story-container">
+      <p>Your story will appear here...</p>
+    </div>
+    <div class="text-controls">
+      <button onclick="readStory()"><i class="fas fa-volume-up"></i> Read Story</button>
+    </div>
+  </div>
+
+  <!-- Word Game Feature -->
+  <div class="feature-page" id="feature-game">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-gamepad"></i> Word Game</h2>
+    <p>Click an image to hear the word and learn.</p>
+   
+    <div class="score-board">
+      <div class="score-item">Score: <span id="score">0</span></div>
+      <div class="score-item">Streak: <span id="streak">0</span></div>
+      <div class="score-item">Best: <span id="bestStreak">0</span></div>
+    </div>
+   
+    <div class="game-container">
+      <div class="hint-section">
+        <p>Hint: <span id="hintText">Click on an image to hear the word</span></p>
+      </div>
+     
+      <div class="game-images">
+        <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" alt="Apple" onclick="checkWord('apple', this)">
+        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" alt="Dog" onclick="checkWord('dog', this)">
+        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" alt="Book" onclick="checkWord('book', this)">
+        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" alt="Tree" onclick="checkWord('tree', this)">
+      </div>
+     
+      <div class="text-controls">
+        <button onclick="sayWord('apple')"><i class="fas fa-volume-up"></i> Hear "Apple"</button>
+        <button onclick="sayWord('dog')"><i class="fas fa-volume-up"></i> Hear "Dog"</button>
+        <button onclick="sayWord('book')"><i class="fas fa-volume-up"></i> Hear "Book"</button>
+        <button onclick="sayWord('tree')"><i class="fas fa-volume-up"></i> Hear "Tree"</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dyslexia Font Converter -->
+  <div class="feature-page" id="feature-dyslexia">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2><i class="fas fa-font"></i> Dyslexia Font Converter</h2>
+    <p>Type or paste text below to convert it to a dyslexia-friendly font:</p>
+    <textarea id="dyslexiaInput" rows="6" placeholder="Type your text here..."></textarea>
+    <button onclick="convertDyslexia()"><i class="fas fa-sync"></i> Convert</button>
+    <div id="dyslexiaOutput" class="dyslexia-output">Converted text will appear here...</div>
+    <div class="text-controls">
+      <button onclick="readConvertedText()"><i class="fas fa-volume-up"></i> Read Converted Text</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Support: info@dyslexiahub.org | © 2025 Dyslexia Learning Hub</p>
+  </footer>
+
+  <script>
+    // Global variables
+    let fontSize = 18;
+    let currentUtterance = null;
+    let score = 0;
+    let streak = 0;
+    let bestStreak = 0;
+   
+    // Sentences for listening practice
+    const sentences = [
+      "The cat sat on the mat.",
+      "She has a big red ball.",
+      "We went to the park yesterday.",
+      "I like to read books before bed.",
+      "The sun is shining brightly today."
+    ];
+   
+    // Stories for random story feature
+    const stories = [
+      "The sun was bright. A cat sat on the fence. Birds sang in the trees. Children played in the park. It was a good day.",
+      "Sam had a red ball. He threw it high. The dog ran to catch it. They played for hours. Both were tired but happy.",
+      "Rain fell on the roof. I sat with a good book. The fire was warm. My cat slept on my lap. It was a cozy afternoon.",
+      "The little seed grew. It reached for the sun. Leaves unfurled green. Flowers bloomed bright. Bees came to visit.",
+      "At the beach we played. Sand castles we built. Waves washed them away. We laughed and built more. The sun set on our fun."
+    ];
+   
+    // Font size functions
+    function increaseFont() {
+      fontSize += 2;
+      document.querySelector('.content').style.fontSize = fontSize + "px";
+      updateFeatureFontSizes();
+    }
+   
+    function decreaseFont() {
+      fontSize = Math.max(14, fontSize - 2);
+      document.querySelector('.content').style.fontSize = fontSize + "px";
+      updateFeatureFontSizes();
+    }
+   
+    function updateFeatureFontSizes() {
+      document.querySelectorAll('.feature-page').forEach(page => {
+        page.style.fontSize = fontSize + "px";
+      });
+    }
+   
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+   
+    // Feature navigation
+    function openFeature(name) {
+      document.getElementById("dashboard").style.display = "none";
+      document.querySelectorAll('.feature-page').forEach(f => f.classList.remove("active"));
+      document.getElementById("feature-" + name).classList.add("active");
+    }
+   
+    function goBack() {
+      document.getElementById("dashboard").style.display = "flex";
+      document.querySelectorAll('.feature-page').forEach(f => f.classList.remove("active"));
+      stopReading();
+    }
+   
+    // Text-to-speech functions
+    function readAloud() {
+      const text = document.getElementById("readText").value;
+      if (text.trim() !== "") {
+        stopReading();
+        currentUtterance = new SpeechSynthesisUtterance(text);
+        currentUtterance.rate = document.getElementById("readSpeed").value;
+        window.speechSynthesis.speak(currentUtterance);
+      }
+    }
+   
+    function pauseReading() {
+      window.speechSynthesis.pause();
+    }
+   
+    function resumeReading() {
+      window.speechSynthesis.resume();
+    }
+   
+    function stopReading() {
+      window.speechSynthesis.cancel();
+    }
+   
+    function updateSpeed() {
+      const speed = document.getElementById("readSpeed").value;
+      document.getElementById("speedValue").textContent = speed;
+      if (currentUtterance) {
+        currentUtterance.rate = speed;
+      }
+    }
+   
+    function sayWord(word) {
+      stopReading();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.rate = 0.8;
+      window.speechSynthesis.speak(utterance);
+     
+      // Update hint
+      document.getElementById("hintText").textContent = `You heard the word "${word}"`;
+    }
+   
+    function spellWord() {
+      const word = document.getElementById("spellWord").value.trim();
+      if (word !== "") {
+        stopReading();
+        document.getElementById("spellingOutput").textContent = word;
+       
+        // Spell the word letter by letter
+        const letters = word.split('');
+        let delay = 0;
+       
+        letters.forEach((letter, index) => {
+          setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(letter);
+            utterance.rate = 0.5;
+            window.speechSynthesis.speak(utterance);
+           
+            // Highlight the letter being spoken
+            const output = document.getElementById("spellingOutput");
+            output.innerHTML = word.substring(0, index) +
+                              `<span style="background-color: yellow;">${letter}</span>` +
+                              word.substring(index + 1);
+          }, delay);
+         
+          delay += 800; // Delay between letters
+        });
+       
+        // Say the whole word after spelling
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(word);
+          utterance.rate = 0.8;
+          window.speechSynthesis.speak(utterance);
+         
+          // Remove highlighting
+          document.getElementById("spellingOutput").textContent = word;
+        }, delay);
+      }
+    }
+   
+    // Listening practice functions
+    function playSentence(index) {
+      if (index >= 0 && index < sentences.length) {
+        stopReading();
+        const sentence = sentences[index];
+        document.getElementById("sentenceDisplay").textContent = sentence;
+       
+        const utterance = new SpeechSynthesisUtterance(sentence);
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+   
+    // Random story functions
+    function generateStory() {
+      const randomIndex = Math.floor(Math.random() * stories.length);
+      const story = stories[randomIndex];
+      document.getElementById("storyOutput").innerHTML = story.split('. ').map(sentence => `<p>${sentence}.</p>`).join('');
+    }
+   
+    function readStory() {
+      const storyText = document.getElementById("storyOutput").textContent;
+      if (storyText && storyText !== "Your story will appear here...") {
+        stopReading();
+        const utterance = new SpeechSynthesisUtterance(storyText);
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+   
+    // Word game functions
+    function checkWord(word, element) {
+      sayWord(word);
+     
+      // Add visual feedback
+      element.style.border = "3px solid #4caf50";
+      setTimeout(() => {
+        element.style.border = "";
+      }, 1000);
+     
+      // Update score
+      score += 10;
+      streak += 1;
+      if (streak > bestStreak) bestStreak = streak;
+     
+      document.getElementById("score").textContent = score;
+      document.getElementById("streak").textContent = streak;
+      document.getElementById("bestStreak").textContent = bestStreak;
+     
+      // Update hint
+      document.getElementById("hintText").textContent = `Good job! You selected "${word}"`;
+    }
+   
+    // Dyslexia font converter
+    function convertDyslexia() {
+      const text = document.getElementById("dyslexiaInput").value;
+      document.getElementById("dyslexiaOutput").textContent = text;
+    }
+   
+    function readConvertedText() {
+      const text = document.getElementById("dyslexiaOutput").textContent;
+      if (text && text !== "Converted text will appear here...") {
+        stopReading();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+   
+    // Modal functions (placeholder)
+    function openModal(modalId) {
+      alert("Modal functionality would be implemented here: " + modalId);
+    }
+  </script>
+</body>
+</html>
